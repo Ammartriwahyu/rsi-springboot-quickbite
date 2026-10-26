@@ -1,0 +1,7 @@
+{
+  "idPelanggan": "CUST-001",
+  "tokenKartu": "invalid_card",
+  "keranjang": [
+    { "idMenu": "MENU-01", "qty": 1 }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "idPelanggan": "P-01",
+  "tokenKartu": "tok_123",
+  "keranjang": [
+    { "idMenu": "M-99", "qty": 1 }
+  ]
+}
