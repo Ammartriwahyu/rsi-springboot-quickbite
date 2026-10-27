@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Aturan bisnis di entity bisa diuji tanpa Spring dan tanpa database. */
 class EntityDomainTest {
 
     private final Pelanggan pelanggan =
@@ -53,7 +52,6 @@ class EntityDomainTest {
         pesanan.batalkan();
         assertThat(pesanan.getStatus()).isEqualTo(StatusPesanan.BATAL);
 
-        // sudah batal: tidak boleh dibatalkan dua kali
         assertThat(pesanan.bisaDibatalkan()).isFalse();
         assertThatThrownBy(pesanan::batalkan).isInstanceOf(IllegalStateException.class);
 

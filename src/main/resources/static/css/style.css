@@ -1,5 +1,3 @@
-/* Tampilan sederhana: latar abu-abu muda, kotak putih */
-
 * {
     box-sizing: border-box;
 }
@@ -11,7 +9,6 @@ body {
     color: #222;
 }
 
-/* Header & footer */
 header {
     background: #333;
     color: white;
@@ -35,7 +32,6 @@ footer {
     padding: 16px;
 }
 
-/* Layout */
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -57,7 +53,6 @@ footer {
     border-bottom: 1px solid #ddd;
 }
 
-/* Tabel */
 .tabel-wrapper {
     overflow-x: auto;
 }
@@ -92,7 +87,6 @@ td input[type="number"] {
     font-size: 17px;
 }
 
-/* Form */
 label {
     display: block;
     margin-top: 10px;
@@ -118,7 +112,6 @@ small {
     color: #666;
 }
 
-/* Tombol */
 button {
     font-size: 14px;
     padding: 6px 12px;
@@ -156,7 +149,6 @@ button:disabled {
     font-size: 15px;
 }
 
-/* Kotak pesan */
 .pesan {
     border: 1px solid;
     border-radius: 4px;

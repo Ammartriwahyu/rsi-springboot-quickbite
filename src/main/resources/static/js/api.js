@@ -1,11 +1,5 @@
-// ============================================================
-// api.js - semua pemanggilan ke backend QuickBite ada di sini
-// ============================================================
-
 const API_URL = "/api";
 
-// Fungsi umum untuk memanggil backend.
-// Selalu mengembalikan { ok, status, data } supaya mudah dicek di app.js
 async function panggilApi(url, opsi) {
     try {
         const response = await fetch(API_URL + url, opsi);
@@ -21,7 +15,6 @@ async function panggilApi(url, opsi) {
         }
         return { ok: response.ok, status: response.status, data: data };
     } catch (error) {
-        // fetch gagal total, biasanya karena server belum dijalankan
         return {
             ok: false,
             status: 0,
@@ -33,22 +26,18 @@ async function panggilApi(url, opsi) {
     }
 }
 
-// GET /api/menu
 function ambilDaftarMenu() {
     return panggilApi("/menu");
 }
 
-// GET /api/pelanggan
 function ambilDaftarPelanggan() {
     return panggilApi("/pelanggan");
 }
 
-// GET /api/pesanan
 function ambilDaftarPesanan() {
     return panggilApi("/pesanan");
 }
 
-// POST /api/checkout
 function kirimCheckout(dataCheckout) {
     return panggilApi("/checkout", {
         method: "POST",
@@ -57,7 +46,6 @@ function kirimCheckout(dataCheckout) {
     });
 }
 
-// POST /api/checkout/{idPesanan}/batal
 function kirimPembatalan(idPesanan, alasan) {
     return panggilApi("/checkout/" + encodeURIComponent(idPesanan) + "/batal", {
         method: "POST",

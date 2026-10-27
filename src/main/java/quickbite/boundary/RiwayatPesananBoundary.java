@@ -8,7 +8,6 @@ import quickbite.controller.RiwayatPesananController;
 
 import java.util.List;
 
-/** Boundary untuk tabel riwayat pesanan di halaman checkout. */
 @RestController
 @RequestMapping("/api/pesanan")
 public class RiwayatPesananBoundary {

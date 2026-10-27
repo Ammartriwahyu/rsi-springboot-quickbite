@@ -17,11 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Uji alur lengkap Boundary → Controller → Entity → database H2,
- * memakai gateway tiruan dan data dari V2__seed.sql.
- * Stok dibandingkan sebelum/sesudah supaya urutan test tidak berpengaruh.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class CheckoutFlowIntegrationTest {
@@ -83,7 +78,7 @@ class CheckoutFlowIntegrationTest {
     @Test
     void menu_sama_dua_kali_dijumlahkan_saat_cek_stok() throws Exception {
         int stokSekarang = stok("MENU-02");
-        int separuhLebih = stokSekarang / 2 + 1;   // tiap baris lolos, tapi totalnya melebihi stok
+        int separuhLebih = stokSekarang / 2 + 1;
 
         checkout("CUST-001", "tok_123", item("MENU-02", separuhLebih), item("MENU-02", separuhLebih))
                 .andExpect(status().isConflict());
@@ -118,7 +113,6 @@ class CheckoutFlowIntegrationTest {
         assertThat(pesananRepo.findById(idPesanan).orElseThrow().getStatus())
                 .isEqualTo(StatusPesanan.BATAL);
 
-        // pembatalan kedua ditolak, stok tidak bertambah lagi
         batal(idPesanan)
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("TIDAK_BISA_DIBATALKAN"));
@@ -129,8 +123,6 @@ class CheckoutFlowIntegrationTest {
     void batal_pesanan_tidak_ada_mengembalikan_404() throws Exception {
         batal("ORD-TIDAK-ADA").andExpect(status().isNotFound());
     }
-
-    // ---- helper ----
 
     private int stok(String idMenu) {
         return menuRepo.findById(idMenu).orElseThrow().getStok();

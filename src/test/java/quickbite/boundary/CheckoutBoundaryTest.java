@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** Uji kontrak HTTP tanpa database: Controller di-mock (slide 31). */
 @WebMvcTest(CheckoutBoundary.class)
 class CheckoutBoundaryTest {
 

@@ -21,23 +21,19 @@
     </properties>
 
     <dependencies>
-        <!-- Boundary: REST endpoint, Jackson, embedded Tomcat -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- Entity: @Entity, Hibernate, Spring Data Repository -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <!-- @Valid, @NotBlank, @Min pada DTO -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Migrasi skema (V1__init.sql, V2__seed.sql) -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -47,20 +43,17 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
-        <!-- Database default (in-memory, tanpa instalasi) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- Database produksi (profil "postgres") -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JUnit 5, MockMvc, AssertJ, @SpringBootTest -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

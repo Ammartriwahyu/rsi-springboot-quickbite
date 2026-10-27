@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** Endpoint katalog membaca data dari V2__seed.sql, dan halaman frontend tersaji di "/". */
 @SpringBootTest
 @AutoConfigureMockMvc
 class KatalogIntegrationTest {

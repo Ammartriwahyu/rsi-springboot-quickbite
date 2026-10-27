@@ -10,10 +10,6 @@ import quickbite.repository.PelangganRepository;
 
 import java.util.List;
 
-/**
- * Controller BCE untuk data katalog yang dibutuhkan halaman checkout:
- * daftar menu (beserta stok) dan daftar pelanggan.
- */
 @Service
 public class KatalogController {
 

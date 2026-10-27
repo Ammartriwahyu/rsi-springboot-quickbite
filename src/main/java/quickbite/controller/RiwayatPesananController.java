@@ -8,7 +8,6 @@ import quickbite.repository.PesananRepository;
 
 import java.util.List;
 
-/** Controller BCE untuk menampilkan riwayat pesanan (terbaru di atas). */
 @Service
 public class RiwayatPesananController {
 

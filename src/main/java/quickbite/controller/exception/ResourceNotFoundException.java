@@ -1,6 +1,5 @@
 package quickbite.controller.exception;
 
-/** Data (pelanggan, menu, pesanan) tidak ada di database. */
 public class ResourceNotFoundException
         extends RuntimeException {
 

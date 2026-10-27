@@ -29,10 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Controller BCE: orkestrator use case checkout dan pembatalan.
- * Ini application service (@Service), bukan @RestController.
- */
 @Service
 public class CheckoutController {
 
@@ -57,14 +53,12 @@ public class CheckoutController {
 
     @Transactional
     public CheckoutResult prosesCheckout(CheckoutCommand cmd) {
-        // 1. Validasi pelanggan
         Pelanggan pelanggan = pelangganRepo
                 .findById(cmd.idPelanggan())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Pelanggan " + cmd.idPelanggan()));
 
-        // 2. Validasi menu dan stok (menu yang sama di keranjang dijumlahkan dulu)
         List<ResolvedItem> items = new ArrayList<>();
         for (Map.Entry<String, Integer> ci : gabungkanQty(cmd.items()).entrySet()) {
             Menu menu = menuRepo
@@ -78,7 +72,6 @@ public class CheckoutController {
             items.add(new ResolvedItem(menu, ci.getValue()));
         }
 
-        // 3. Bentuk pesanan (komposisi Pesanan ◆ ItemPesanan)
         Pesanan pesanan = new Pesanan(
                 UUID.randomUUID().toString(),
                 LocalDateTime.now(), pelanggan);
@@ -89,8 +82,6 @@ public class CheckoutController {
         }
         double total = pesanan.hitungTotal();
 
-        // 4. Minta pembayaran ke boundary eksternal.
-        //    Kalau gagal, PaymentFailedException membuat @Transactional rollback.
         String kodeRef = paymentGateway
                 .mintaTransaksiPembayaran(
                         total, cmd.tokenKartu());
@@ -102,7 +93,6 @@ public class CheckoutController {
                 total, metode, "SUKSES", kodeRef);
         pesanan.setPembayaran(pembayaran);
 
-        // 5. Potong stok, ubah status, simpan (cascade ikut menyimpan item & pembayaran)
         for (ResolvedItem ri : items) {
             if (!ri.menu().kurangiStok(ri.qty())) {
                 throw new StokTidakCukupException(ri.menu().getIdMenu());
@@ -130,7 +120,6 @@ public class CheckoutController {
                     pesanan.getIdPesanan(), pesanan.getStatus());
         }
 
-        // Kembalikan stok tiap menu yang dipesan
         for (ItemPesanan item : pesanan.getItems()) {
             Menu menu = menuRepo
                     .findByIdForUpdate(item.getMenu().getIdMenu())
@@ -147,7 +136,6 @@ public class CheckoutController {
                 pesanan.getIdPesanan(), pesanan.getStatus().name(), cmd.alasan());
     }
 
-    /** Menu yang muncul lebih dari sekali di keranjang dijumlahkan qty-nya. */
     private static Map<String, Integer> gabungkanQty(List<CheckoutCommand.Item> items) {
         Map<String, Integer> hasil = new LinkedHashMap<>();
         for (CheckoutCommand.Item item : items) {

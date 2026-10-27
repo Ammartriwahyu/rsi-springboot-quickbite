@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** Pesanan hasil checkout tersimpan dan tampil di riwayat, termasuk setelah dibatalkan. */
 @SpringBootTest
 @AutoConfigureMockMvc
 class RiwayatPesananIntegrationTest {

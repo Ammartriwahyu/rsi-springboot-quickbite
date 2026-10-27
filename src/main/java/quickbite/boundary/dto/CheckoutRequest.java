@@ -8,7 +8,6 @@ import quickbite.controller.dto.CheckoutCommand;
 
 import java.util.List;
 
-/** Kontrak HTTP untuk POST /api/checkout. metodePembayaran boleh dikosongkan. */
 public record CheckoutRequest(
         @NotBlank(message = "idPelanggan wajib diisi") String idPelanggan,
         @NotBlank(message = "tokenKartu wajib diisi") String tokenKartu,
@@ -19,7 +18,6 @@ public record CheckoutRequest(
             @NotBlank(message = "idMenu wajib diisi") String idMenu,
             @Min(value = 1, message = "qty minimal 1") int qty) { }
 
-    /** Map DTO web → Command, supaya Controller tidak bergantung pada DTO HTTP. */
     public CheckoutCommand toCommand() {
         return new CheckoutCommand(idPelanggan, tokenKartu, metodePembayaran,
                 keranjang.stream()

@@ -15,10 +15,6 @@ import quickbite.controller.CheckoutController;
 import quickbite.controller.dto.BatalTransaksiResult;
 import quickbite.controller.dto.CheckoutResult;
 
-/**
- * Boundary (CheckoutUI di DCD 8b). Hanya menangani HTTP, validasi input,
- * dan konversi DTO ↔ Command/Result. Tidak ada logika bisnis di sini.
- */
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutBoundary {
@@ -30,7 +26,6 @@ public class CheckoutBoundary {
         this.checkoutController = checkoutController;
     }
 
-    /** klikTombolCheckout(keranjangData) */
     @PostMapping
     public ResponseEntity<CheckoutResponse> checkout(
             @Valid @RequestBody CheckoutRequest request) {
@@ -42,7 +37,6 @@ public class CheckoutBoundary {
                 hasil.idPesanan(), hasil.total()));
     }
 
-    /** batalkanTransaksi(alasan) */
     @PostMapping("/{idPesanan}/batal")
     public ResponseEntity<BatalTransaksiResponse> batal(
             @PathVariable String idPesanan,

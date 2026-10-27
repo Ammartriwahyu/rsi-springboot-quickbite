@@ -22,7 +22,7 @@ public class Pelanggan {
     @OneToMany(mappedBy = "pelanggan")
     private List<Pesanan> daftarPesanan = new ArrayList<>();
 
-    protected Pelanggan() { }              // wajib untuk JPA
+    protected Pelanggan() { }
 
     public Pelanggan(String id, String nama, String email,
                      String telepon, String alamat) {

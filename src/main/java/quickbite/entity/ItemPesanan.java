@@ -16,12 +16,10 @@ public class ItemPesanan {
     private int jumlah;
     private double subtotal;
 
-    // Komposisi ◆: item tidak punya makna tanpa Pesanan
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_pesanan", nullable = false)
     private Pesanan pesanan;
 
-    // Agregasi ◇: hanya merujuk Menu, tanpa cascade
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_menu", nullable = false)
     private Menu menu;

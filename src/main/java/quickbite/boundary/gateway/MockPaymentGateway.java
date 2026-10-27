@@ -8,11 +8,6 @@ import quickbite.controller.exception.PaymentFailedException;
 
 import java.util.UUID;
 
-/**
- * Gateway tiruan (dari modul). Tidak menghubungi server mana pun.
- * Token "invalid_card" selalu ditolak; token lain selalu berhasil.
- * Aktif secara default (quickbite.payment.mode=mock).
- */
 @Component
 @ConditionalOnProperty(name = "quickbite.payment.mode", havingValue = "mock", matchIfMissing = true)
 class MockPaymentGateway implements PaymentGatewayAPI {

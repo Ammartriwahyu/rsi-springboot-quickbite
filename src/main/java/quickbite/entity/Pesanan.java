@@ -33,7 +33,6 @@ public class Pesanan {
     @JoinColumn(name = "id_pelanggan", nullable = false)
     private Pelanggan pelanggan;
 
-    // Komposisi ◆: item ikut disimpan/dihapus bersama Pesanan
     @OneToMany(mappedBy = "pesanan", cascade = CascadeType.ALL,
                orphanRemoval = true)
     private List<ItemPesanan> items = new ArrayList<>();
@@ -51,7 +50,7 @@ public class Pesanan {
     }
 
     public void tambahItem(ItemPesanan item) {
-        item.setPesanan(this);          // komposisi ◆
+        item.setPesanan(this);
         items.add(item);
     }
 
@@ -66,7 +65,6 @@ public class Pesanan {
         this.status = statusBaru;
     }
 
-    /** Pesanan yang sudah dikirim, selesai, atau sudah batal tidak bisa dibatalkan lagi. */
     public boolean bisaDibatalkan() {
         return status == StatusPesanan.MENUNGGU_BAYAR
             || status == StatusPesanan.DIPROSES;

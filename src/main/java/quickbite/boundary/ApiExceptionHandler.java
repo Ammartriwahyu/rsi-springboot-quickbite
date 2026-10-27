@@ -16,7 +16,6 @@ import quickbite.controller.exception.StokTidakCukupException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Menerjemahkan error domain menjadi respons HTTP (tampilkanPesanError). */
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -52,7 +51,6 @@ public class ApiExceptionHandler {
                         e.getMessage()));
     }
 
-    /** Input tidak lolos @Valid (dari modul). */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> validasiGagal(
             MethodArgumentNotValidException e) {
@@ -65,7 +63,6 @@ public class ApiExceptionHandler {
                         "Validasi input gagal", errors));
     }
 
-    /** Body bukan JSON yang valid. */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> jsonTidakValid(
             HttpMessageNotReadableException e) {

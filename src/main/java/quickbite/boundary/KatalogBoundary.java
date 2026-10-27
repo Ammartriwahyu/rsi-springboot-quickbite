@@ -9,7 +9,6 @@ import quickbite.controller.KatalogController;
 
 import java.util.List;
 
-/** Boundary untuk data yang ditampilkan di halaman checkout. */
 @RestController
 @RequestMapping("/api")
 public class KatalogBoundary {

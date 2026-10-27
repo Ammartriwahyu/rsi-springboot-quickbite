@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-/** Aturan stok ada di domain, bukan di Controller atau Boundary. */
 @Entity
 @Table(name = "menu")
 public class Menu {
@@ -35,7 +34,6 @@ public class Menu {
         return true;
     }
 
-    /** Mengembalikan stok saat pesanan dibatalkan. */
     public void tambahStok(int qty) {
         if (qty <= 0) {
             throw new IllegalArgumentException("Jumlah stok yang dikembalikan harus lebih dari 0");

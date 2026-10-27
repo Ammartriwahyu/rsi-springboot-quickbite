@@ -1,13 +1,8 @@
-// ============================================================
-// app.js - logika halaman checkout QuickBite
-// ============================================================
+let daftarMenu = [];
+let daftarPelanggan = [];
+let keranjang = [];
+let riwayat = [];
 
-let daftarMenu = [];       // dari GET /api/menu
-let daftarPelanggan = [];  // dari GET /api/pelanggan
-let keranjang = [];        // { idMenu, namaMenu, harga, qty }
-let riwayat = [];          // dari GET /api/pesanan
-
-// Judul pesan untuk setiap kode error dari backend
 const JUDUL_ERROR = {
     STOK_HABIS: "Stok tidak mencukupi",
     NOT_FOUND: "Data tidak ditemukan",
@@ -18,14 +13,10 @@ const JUDUL_ERROR = {
     SERVER_MATI: "Server tidak dapat dihubungi"
 };
 
-
-// ---------- Fungsi bantuan ----------
-
 function formatRupiah(angka) {
     return "Rp " + Number(angka).toLocaleString("id-ID");
 }
 
-// "2026-10-27T13:30:00" -> "27/10/2026, 13.30"
 function formatWaktu(tanggal) {
     return new Date(tanggal).toLocaleString("id-ID", {
         day: "2-digit", month: "2-digit", year: "numeric",
@@ -33,14 +24,12 @@ function formatWaktu(tanggal) {
     });
 }
 
-// Membuat satu sel <td> berisi teks
 function buatSel(teks) {
     const td = document.createElement("td");
     td.textContent = teks;
     return td;
 }
 
-// Baris "kosong" untuk tabel yang belum ada isinya
 function barisKosong(tbody, teks, jumlahKolom = 5) {
     tbody.innerHTML = "";
     const tr = document.createElement("tr");
@@ -50,9 +39,6 @@ function barisKosong(tbody, teks, jumlahKolom = 5) {
     tr.appendChild(td);
     tbody.appendChild(tr);
 }
-
-
-// ---------- Pesan sukses / error ----------
 
 function tampilkanPesan(jenis, judul, daftarDetail) {
     const kotakPesan = document.getElementById("pesan");
@@ -77,7 +63,6 @@ function tampilkanPesan(jenis, judul, daftarDetail) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// Menampilkan error dari backend (tampilkanPesanError di diagram)
 function tampilkanError(hasil) {
     const data = hasil.data || {};
     let judul = JUDUL_ERROR[data.code] || "Terjadi kesalahan";
@@ -96,9 +81,6 @@ function tampilkanError(hasil) {
     }
     tampilkanPesan("error", judul, detail);
 }
-
-
-// ---------- Pelanggan ----------
 
 async function muatPelanggan() {
     const hasil = await ambilDaftarPelanggan();
@@ -125,9 +107,6 @@ async function muatPelanggan() {
         select.appendChild(opsi);
     }
 }
-
-
-// ---------- Menu ----------
 
 async function muatMenu() {
     const hasil = await ambilDaftarMenu();
@@ -158,7 +137,6 @@ function tampilkanMenu() {
         tr.appendChild(buatSel(formatRupiah(menu.harga)));
         tr.appendChild(buatSel(menu.stok > 0 ? menu.stok : "Habis"));
 
-        // input jumlah
         const tdJumlah = document.createElement("td");
         const inputJumlah = document.createElement("input");
         inputJumlah.type = "number";
@@ -167,7 +145,6 @@ function tampilkanMenu() {
         tdJumlah.appendChild(inputJumlah);
         tr.appendChild(tdJumlah);
 
-        // tombol tambah
         const tdAksi = document.createElement("td");
         const tombol = document.createElement("button");
         tombol.textContent = "Tambah";
@@ -182,9 +159,6 @@ function tampilkanMenu() {
     }
 }
 
-
-// ---------- Keranjang ----------
-
 function tambahKeKeranjang(menu, jumlahInput) {
     const qty = parseInt(jumlahInput, 10);
     if (isNaN(qty) || qty < 1) {
@@ -192,7 +166,6 @@ function tambahKeKeranjang(menu, jumlahInput) {
         return;
     }
 
-    // kalau menu sudah ada di keranjang, jumlahnya ditambah
     const itemLama = keranjang.find(item => item.idMenu === menu.idMenu);
     if (itemLama) {
         itemLama.qty += qty;
@@ -247,9 +220,6 @@ function tampilkanKeranjang() {
     document.getElementById("total-biaya").textContent = formatRupiah(total);
 }
 
-
-// ---------- Checkout (klikTombolCheckout) ----------
-
 async function prosesCheckout(event) {
     event.preventDefault();
 
@@ -257,7 +227,6 @@ async function prosesCheckout(event) {
     const metode = document.getElementById("metode").value;
     const tokenKartu = document.getElementById("token-kartu").value.trim();
 
-    // cek sederhana sebelum dikirim; aturan stok tetap dicek oleh backend
     const kurang = [];
     if (!idPelanggan) kurang.push("Pilih pelanggan terlebih dahulu.");
     if (keranjang.length === 0) kurang.push("Keranjang masih kosong.");
@@ -281,7 +250,6 @@ async function prosesCheckout(event) {
     const hasil = await kirimCheckout(dataCheckout);
 
     if (hasil.ok) {
-        // checkoutBerhasil(idPesanan, total)
         tampilkanPesan("sukses", "Checkout berhasil!", [
             "ID Pesanan: " + hasil.data.idPesanan,
             "Total dibayar: " + formatRupiah(hasil.data.total)
@@ -294,12 +262,9 @@ async function prosesCheckout(event) {
 
     tombol.disabled = false;
     tombol.textContent = "Checkout";
-    await muatMenu();      // stok terbaru dari server
-    await muatRiwayat();   // riwayat terbaru dari server
+    await muatMenu();
+    await muatRiwayat();
 }
-
-
-// ---------- Riwayat & pembatalan (batalkanTransaksi) ----------
 
 async function muatRiwayat() {
     const hasil = await ambilDaftarPesanan();
@@ -326,7 +291,6 @@ function tampilkanRiwayat() {
         const tr = document.createElement("tr");
         tr.appendChild(buatSel(formatWaktu(pesanan.tanggal)));
 
-        // ID ditampilkan pendek, ID lengkap muncul saat kursor diarahkan
         const tdId = buatSel(pesanan.idPesanan.substring(0, 8) + "...");
         tdId.title = pesanan.idPesanan;
         tr.appendChild(tdId);
@@ -358,7 +322,7 @@ function tampilkanRiwayat() {
 async function batalkanPesanan(pesanan) {
     const alasan = prompt("Alasan pembatalan pesanan:");
     if (alasan === null) {
-        return; // pengguna menekan Cancel
+        return;
     }
 
     const hasil = await kirimPembatalan(pesanan.idPesanan, alasan.trim());
@@ -376,9 +340,6 @@ async function batalkanPesanan(pesanan) {
     await muatMenu();
     await muatRiwayat();
 }
-
-
-// ---------- Mulai ----------
 
 document.getElementById("form-checkout").addEventListener("submit", prosesCheckout);
 muatPelanggan();

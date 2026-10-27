@@ -9,11 +9,6 @@ import quickbite.controller.exception.PaymentFailedException;
 
 import java.util.Map;
 
-/**
- * Adapter HTTP sesuai slide 19. Hanya ilustrasi: format request ini
- * bukan format API Midtrans yang asli, jadi tidak akan berhasil ke server Midtrans.
- * Aktif hanya kalau quickbite.payment.mode=midtrans.
- */
 @Component
 @ConditionalOnProperty(name = "quickbite.payment.mode", havingValue = "midtrans")
 class MidtransPaymentGateway implements PaymentGatewayAPI {

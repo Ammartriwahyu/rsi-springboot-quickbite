@@ -1,5 +1,3 @@
--- Skema QuickBite. Kompatibel dengan H2 dan PostgreSQL.
-
 CREATE TABLE pelanggan (
     id_pelanggan   VARCHAR(36)  PRIMARY KEY,
     nama           VARCHAR(100) NOT NULL,
@@ -23,7 +21,6 @@ CREATE TABLE pesanan (
     id_pelanggan  VARCHAR(36)      NOT NULL REFERENCES pelanggan (id_pelanggan)
 );
 
--- Komposisi: item ikut terhapus kalau pesanannya dihapus
 CREATE TABLE item_pesanan (
     id_item     VARCHAR(36)      PRIMARY KEY,
     jumlah      INTEGER          NOT NULL CHECK (jumlah > 0),
