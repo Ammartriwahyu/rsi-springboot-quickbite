@@ -5,7 +5,7 @@
 let daftarMenu = [];       // dari GET /api/menu
 let daftarPelanggan = [];  // dari GET /api/pelanggan
 let keranjang = [];        // { idMenu, namaMenu, harga, qty }
-let riwayat = [];          // { idPesanan, namaPelanggan, total, status }
+let riwayat = [];          // dari GET /api/pesanan
 
 // Judul pesan untuk setiap kode error dari backend
 const JUDUL_ERROR = {
@@ -25,6 +25,14 @@ function formatRupiah(angka) {
     return "Rp " + Number(angka).toLocaleString("id-ID");
 }
 
+// "2026-10-27T13:30:00" -> "27/10/2026, 13.30"
+function formatWaktu(tanggal) {
+    return new Date(tanggal).toLocaleString("id-ID", {
+        day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+    });
+}
+
 // Membuat satu sel <td> berisi teks
 function buatSel(teks) {
     const td = document.createElement("td");
@@ -33,11 +41,11 @@ function buatSel(teks) {
 }
 
 // Baris "kosong" untuk tabel yang belum ada isinya
-function barisKosong(tbody, teks) {
+function barisKosong(tbody, teks, jumlahKolom = 5) {
     tbody.innerHTML = "";
     const tr = document.createElement("tr");
     const td = buatSel(teks);
-    td.colSpan = 5;
+    td.colSpan = jumlahKolom;
     td.className = "kosong";
     tr.appendChild(td);
     tbody.appendChild(tr);
@@ -116,11 +124,6 @@ async function muatPelanggan() {
         opsi.textContent = pelanggan.nama + " (" + pelanggan.idPelanggan + ")";
         select.appendChild(opsi);
     }
-}
-
-function cariNamaPelanggan(idPelanggan) {
-    const pelanggan = daftarPelanggan.find(p => p.idPelanggan === idPelanggan);
-    return pelanggan ? pelanggan.nama : idPelanggan;
 }
 
 
@@ -283,38 +286,45 @@ async function prosesCheckout(event) {
             "ID Pesanan: " + hasil.data.idPesanan,
             "Total dibayar: " + formatRupiah(hasil.data.total)
         ]);
-        riwayat.unshift({
-            idPesanan: hasil.data.idPesanan,
-            namaPelanggan: cariNamaPelanggan(idPelanggan),
-            total: hasil.data.total,
-            status: "DIPROSES"
-        });
         keranjang = [];
         tampilkanKeranjang();
-        tampilkanRiwayat();
     } else {
         tampilkanError(hasil);
     }
 
     tombol.disabled = false;
     tombol.textContent = "Checkout";
-    await muatMenu();   // stok terbaru dari server
+    await muatMenu();      // stok terbaru dari server
+    await muatRiwayat();   // riwayat terbaru dari server
 }
 
 
 // ---------- Riwayat & pembatalan (batalkanTransaksi) ----------
+
+async function muatRiwayat() {
+    const hasil = await ambilDaftarPesanan();
+
+    if (!hasil.ok) {
+        barisKosong(document.getElementById("tabel-riwayat"), "Gagal memuat riwayat", 6);
+        return;
+    }
+
+    riwayat = hasil.data;
+    tampilkanRiwayat();
+}
 
 function tampilkanRiwayat() {
     const tbody = document.getElementById("tabel-riwayat");
     tbody.innerHTML = "";
 
     if (riwayat.length === 0) {
-        barisKosong(tbody, "Belum ada pesanan");
+        barisKosong(tbody, "Belum ada pesanan", 6);
         return;
     }
 
     for (const pesanan of riwayat) {
         const tr = document.createElement("tr");
+        tr.appendChild(buatSel(formatWaktu(pesanan.tanggal)));
         tr.appendChild(buatSel(pesanan.idPesanan));
         tr.appendChild(buatSel(pesanan.namaPelanggan));
         tr.appendChild(buatSel(formatRupiah(pesanan.total)));
@@ -350,18 +360,17 @@ async function batalkanPesanan(pesanan) {
     const hasil = await kirimPembatalan(pesanan.idPesanan, alasan.trim());
 
     if (hasil.ok) {
-        pesanan.status = hasil.data.status;
         tampilkanPesan("sukses", "Pesanan berhasil dibatalkan", [
             "ID Pesanan: " + hasil.data.idPesanan,
             "Alasan: " + hasil.data.alasan,
             "Stok menu sudah dikembalikan."
         ]);
-        tampilkanRiwayat();
     } else {
         tampilkanError(hasil);
     }
 
     await muatMenu();
+    await muatRiwayat();
 }
 
 
@@ -370,3 +379,4 @@ async function batalkanPesanan(pesanan) {
 document.getElementById("form-checkout").addEventListener("submit", prosesCheckout);
 muatPelanggan();
 muatMenu();
+muatRiwayat();

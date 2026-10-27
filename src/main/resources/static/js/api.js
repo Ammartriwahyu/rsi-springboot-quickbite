@@ -43,6 +43,11 @@ function ambilDaftarPelanggan() {
     return panggilApi("/pelanggan");
 }
 
+// GET /api/pesanan
+function ambilDaftarPesanan() {
+    return panggilApi("/pesanan");
+}
+
 // POST /api/checkout
 function kirimCheckout(dataCheckout) {
     return panggilApi("/checkout", {
