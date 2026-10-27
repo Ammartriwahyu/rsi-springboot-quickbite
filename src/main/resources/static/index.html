@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - Checkout</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>QuickBite</h1>
+        <p>Pesan makanan, checkout, dan bayar</p>
+    </header>
+
+    <main class="container">
+
+        <!-- Pesan sukses / error (tampilkanPesanError) -->
+        <div id="pesan" class="pesan" hidden></div>
+
+        <!-- 1. Pelanggan -->
+        <section class="kotak">
+            <h2>1. Pilih Pelanggan</h2>
+            <select id="pilih-pelanggan">
+                <option value="">-- memuat data pelanggan --</option>
+            </select>
+        </section>
+
+        <!-- 2. Daftar menu -->
+        <section class="kotak">
+            <h2>2. Daftar Menu</h2>
+            <div class="tabel-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Menu</th>
+                            <th>Harga</th>
+                            <th>Stok</th>
+                            <th>Jumlah</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-menu">
+                        <tr><td colspan="5" class="kosong">Memuat menu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. Keranjang -->
+        <section class="kotak">
+            <h2>3. Keranjang</h2>
+            <div class="tabel-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Menu</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-keranjang">
+                        <tr><td colspan="5" class="kosong">Keranjang masih kosong</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="total">Total: <span id="total-biaya">Rp 0</span></p>
+        </section>
+
+        <!-- 4. Pembayaran -->
+        <section class="kotak">
+            <h2>4. Pembayaran</h2>
+            <form id="form-checkout">
+                <label for="metode">Metode Pembayaran</label>
+                <select id="metode">
+                    <option value="KARTU_KREDIT">Kartu Kredit</option>
+                    <option value="KARTU_DEBIT">Kartu Debit</option>
+                    <option value="E_WALLET">E-Wallet</option>
+                </select>
+
+                <label for="token-kartu">Token Kartu</label>
+                <input type="text" id="token-kartu" value="tok_123" autocomplete="off">
+                <small>Simulasi: isi <b>invalid_card</b> untuk mencoba pembayaran yang ditolak.</small>
+
+                <button type="submit" id="tombol-checkout">Checkout</button>
+            </form>
+        </section>
+
+        <!-- 5. Riwayat pesanan -->
+        <section class="kotak">
+            <h2>5. Riwayat Pesanan</h2>
+            <div class="tabel-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-riwayat">
+                        <tr><td colspan="5" class="kosong">Belum ada pesanan</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <small>Riwayat hanya tersimpan selama halaman ini tidak di-refresh.</small>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>QuickBite &middot; Tugas RSI &middot; Spring Boot (Boundary - Controller - Entity)</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
