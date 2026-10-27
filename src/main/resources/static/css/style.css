@@ -130,6 +130,7 @@ small {
 
 .pesan.error {
     border-width: 3px;
+    color: red;
 }
 
 .pesan ul {
