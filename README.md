@@ -19,7 +19,7 @@ Tidak perlu instal Maven, cukup pakai Maven Wrapper bawaan project.
 
 Di PowerShell atau CMD: `.\mvnw.cmd spring-boot:run`. Aplikasi jalan di `http://localhost:8080`.
 
-Menjalankan semua test (26 test):
+Menjalankan semua test (28 test):
 
 ```bash
 ./mvnw test
@@ -46,7 +46,8 @@ Setelah aplikasi jalan, buka `http://localhost:8080` di browser. Alurnya mengiku
 2. **Daftar menu** beserta harga dan stok, diambil dari `GET /api/menu`. Isi jumlah, lalu klik **Tambah**.
 3. **Keranjang**: lihat subtotal dan total, atau hapus item
 4. **Pembayaran**: pilih metode, isi token kartu, lalu klik **Checkout** (`POST /api/checkout`)
-5. **Riwayat pesanan**: klik **Batalkan** untuk membatalkan pesanan (`POST /api/checkout/{id}/batal`)
+5. **Riwayat pesanan**, diambil dari `GET /api/pesanan` sehingga tetap ada setelah halaman di-refresh.
+   Klik **Batalkan** untuk membatalkan pesanan (`POST /api/checkout/{id}/batal`).
 
 Pesan sukses tampil dalam kotak hijau, dan pesan error dari backend tampil dalam kotak merah lengkap
 dengan kode HTTP-nya. Stok sengaja tidak dicek di browser supaya aturan stok tetap dijalankan oleh
@@ -67,6 +68,7 @@ File frontend ada di `src/main/resources/static/`:
 |---|---|---|
 | GET | `/api/menu` | Daftar menu beserta harga dan stok |
 | GET | `/api/pelanggan` | Daftar pelanggan |
+| GET | `/api/pesanan` | Riwayat pesanan, terbaru di atas |
 | POST | `/api/checkout` | Checkout keranjang dan bayar |
 | POST | `/api/checkout/{idPesanan}/batal` | Batalkan pesanan, stok dikembalikan |
 
@@ -116,9 +118,10 @@ src/main/java/quickbite/
 ├── boundary/                     <<boundary>>
 │   ├── CheckoutBoundary          @RestController (CheckoutUI)
 │   ├── KatalogBoundary           @RestController: GET menu & pelanggan untuk halaman checkout
+│   ├── RiwayatPesananBoundary    @RestController: GET riwayat pesanan
 │   ├── ApiExceptionHandler       error domain → HTTP
 │   ├── dto/                      CheckoutRequest/Response, BatalTransaksiRequest/Response,
-│   │                             MenuResponse, PelangganResponse, ApiError
+│   │                             MenuResponse, PelangganResponse, PesananResponse, ApiError
 │   └── gateway/
 │       ├── PaymentGatewayAPI     interface outbound
 │       ├── MockPaymentGateway    tiruan, aktif default
@@ -126,8 +129,9 @@ src/main/java/quickbite/
 ├── controller/                   <<controller>>
 │   ├── CheckoutController        @Service @Transactional (orkestrator use case)
 │   ├── KatalogController         @Service: menyiapkan daftar menu & pelanggan
+│   ├── RiwayatPesananController  @Service: menyiapkan riwayat pesanan
 │   ├── dto/                      CheckoutCommand/Result, BatalTransaksiCommand/Result,
-│   │                             MenuInfo, PelangganInfo
+│   │                             MenuInfo, PelangganInfo, PesananInfo
 │   └── exception/                StokTidakCukup, ResourceNotFound, PaymentFailed, PesananTidakBisaDibatalkan
 ├── entity/                       <<entity>>  Pelanggan, Menu, Pesanan, ItemPesanan, Pembayaran, StatusPesanan
 └── repository/                   adapter persistensi (MenuRepository dengan pessimistic lock)
