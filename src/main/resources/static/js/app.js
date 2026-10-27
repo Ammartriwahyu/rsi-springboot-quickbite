@@ -325,7 +325,11 @@ function tampilkanRiwayat() {
     for (const pesanan of riwayat) {
         const tr = document.createElement("tr");
         tr.appendChild(buatSel(formatWaktu(pesanan.tanggal)));
-        tr.appendChild(buatSel(pesanan.idPesanan));
+
+        // ID ditampilkan pendek, ID lengkap muncul saat kursor diarahkan
+        const tdId = buatSel(pesanan.idPesanan.substring(0, 8) + "...");
+        tdId.title = pesanan.idPesanan;
+        tr.appendChild(tdId);
         tr.appendChild(buatSel(pesanan.namaPelanggan));
         tr.appendChild(buatSel(formatRupiah(pesanan.total)));
 
