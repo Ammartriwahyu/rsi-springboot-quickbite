@@ -7,6 +7,7 @@ fitur batalkan transaksi, validasi input).
 - Spring Boot 3.5 · Java 21 (bisa dijalankan dengan JDK 21 atau lebih baru)
 - Database default: **H2 in-memory** (tanpa instalasi). PostgreSQL tersedia lewat profil `postgres`.
 - Payment gateway default: **tiruan**, tidak memproses uang sungguhan.
+- Frontend: HTML, CSS, dan JavaScript biasa, tersaji langsung oleh Spring Boot di `http://localhost:8080`.
 
 ## Menjalankan
 
@@ -18,7 +19,7 @@ Tidak perlu instal Maven, cukup pakai Maven Wrapper bawaan project.
 
 Di PowerShell atau CMD: `.\mvnw.cmd spring-boot:run`. Aplikasi jalan di `http://localhost:8080`.
 
-Menjalankan semua test (22 test):
+Menjalankan semua test (26 test):
 
 ```bash
 ./mvnw test
@@ -37,10 +38,35 @@ Buat database `quickbite` dengan user `quickbite`, lalu:
 DB_PASSWORD=passwordmu ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
 
+## Halaman frontend
+
+Setelah aplikasi jalan, buka `http://localhost:8080` di browser. Alurnya mengikuti use case checkout:
+
+1. **Pilih pelanggan**, diambil dari `GET /api/pelanggan`
+2. **Daftar menu** beserta harga dan stok, diambil dari `GET /api/menu`. Isi jumlah, lalu klik **Tambah**.
+3. **Keranjang**: lihat subtotal dan total, atau hapus item
+4. **Pembayaran**: pilih metode, isi token kartu, lalu klik **Checkout** (`POST /api/checkout`)
+5. **Riwayat pesanan**: klik **Batalkan** untuk membatalkan pesanan (`POST /api/checkout/{id}/batal`)
+
+Pesan sukses tampil dalam kotak hijau, dan pesan error dari backend tampil dalam kotak merah lengkap
+dengan kode HTTP-nya. Stok sengaja tidak dicek di browser supaya aturan stok tetap dijalankan oleh
+entity `Menu` di backend. Isi token `invalid_card` untuk mencoba pembayaran yang ditolak.
+
+File frontend ada di `src/main/resources/static/`:
+
+| File | Isi |
+|---|---|
+| `index.html` | Struktur halaman |
+| `css/style.css` | Tampilan |
+| `js/api.js` | Fungsi pemanggil endpoint backend (`fetch`) |
+| `js/app.js` | Logika keranjang, checkout, riwayat, dan pembatalan |
+
 ## Endpoint
 
 | Method | URL | Kegunaan |
 |---|---|---|
+| GET | `/api/menu` | Daftar menu beserta harga dan stok |
+| GET | `/api/pelanggan` | Daftar pelanggan |
 | POST | `/api/checkout` | Checkout keranjang dan bayar |
 | POST | `/api/checkout/{idPesanan}/batal` | Batalkan pesanan, stok dikembalikan |
 
@@ -89,18 +115,24 @@ Body yang sama bisa dipakai di Postman (Body → raw → JSON).
 src/main/java/quickbite/
 ├── boundary/                     <<boundary>>
 │   ├── CheckoutBoundary          @RestController (CheckoutUI)
+│   ├── KatalogBoundary           @RestController: GET menu & pelanggan untuk halaman checkout
 │   ├── ApiExceptionHandler       error domain → HTTP
-│   ├── dto/                      CheckoutRequest/Response, BatalTransaksiRequest/Response, ApiError
+│   ├── dto/                      CheckoutRequest/Response, BatalTransaksiRequest/Response,
+│   │                             MenuResponse, PelangganResponse, ApiError
 │   └── gateway/
 │       ├── PaymentGatewayAPI     interface outbound
 │       ├── MockPaymentGateway    tiruan, aktif default
 │       └── MidtransPaymentGateway adapter HTTP slide 19 (ilustrasi, mode=midtrans)
 ├── controller/                   <<controller>>
 │   ├── CheckoutController        @Service @Transactional (orkestrator use case)
-│   ├── dto/                      CheckoutCommand/Result, BatalTransaksiCommand/Result
+│   ├── KatalogController         @Service: menyiapkan daftar menu & pelanggan
+│   ├── dto/                      CheckoutCommand/Result, BatalTransaksiCommand/Result,
+│   │                             MenuInfo, PelangganInfo
 │   └── exception/                StokTidakCukup, ResourceNotFound, PaymentFailed, PesananTidakBisaDibatalkan
 ├── entity/                       <<entity>>  Pelanggan, Menu, Pesanan, ItemPesanan, Pembayaran, StatusPesanan
 └── repository/                   adapter persistensi (MenuRepository dengan pessimistic lock)
+
+src/main/resources/static/        frontend (index.html, css/, js/)
 ```
 
 Aturan dependensi: `boundary → controller → entity`. Entity tidak meng-import boundary/controller,
