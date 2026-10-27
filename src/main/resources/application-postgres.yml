@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:quickbite}?sslmode=${DB_SSLMODE:prefer}
-    username: ${DB_USER:quickbite}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST:${PGHOST_UNPOOLED:localhost}}:${DB_PORT:5432}/${DB_NAME:${PGDATABASE:quickbite}}?sslmode=${DB_SSLMODE:prefer}
+    username: ${DB_USER:${PGUSER:quickbite}}
+    password: ${DB_PASSWORD:${PGPASSWORD:}}
   h2:
     console:
       enabled: false
