@@ -1,0 +1,9 @@
+target/
+.git/
+.claude/
+.idea/
+.vscode/
+test-requests/
+*.iml
+README.md
+HELP.md
