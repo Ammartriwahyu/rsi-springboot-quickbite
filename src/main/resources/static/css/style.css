@@ -1,65 +1,51 @@
-/* ===== Dasar ===== */
+/* Tampilan sederhana: hitam putih, kotak bergaris */
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f4f4;
-    color: #333333;
+    font-family: Arial, sans-serif;
+    background: white;
+    color: black;
 }
 
-h1, h2 {
-    margin-top: 0;
-}
-
-/* ===== Header & footer ===== */
-header {
-    background-color: #e85d04;
-    color: white;
+header, footer {
     text-align: center;
-    padding: 20px 16px;
+    padding: 10px;
+}
+
+header {
+    border-bottom: 1px solid black;
 }
 
 header h1 {
-    margin-bottom: 4px;
-}
-
-header p {
     margin: 0;
 }
 
-footer {
-    text-align: center;
-    color: #777777;
-    font-size: 14px;
-    padding: 16px;
+header p {
+    margin: 4px 0 0;
 }
 
-/* ===== Layout ===== */
 .container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 0 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
 }
 
 .kotak {
-    background-color: white;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    padding: 16px;
+    border: 1px solid black;
+    padding: 12px;
     margin-bottom: 16px;
 }
 
 .kotak h2 {
+    margin-top: 0;
     font-size: 18px;
-    color: #e85d04;
-    border-bottom: 1px solid #eeeeee;
-    padding-bottom: 8px;
 }
 
-/* ===== Tabel ===== */
+/* Tabel */
 .tabel-wrapper {
     overflow-x: auto;
 }
@@ -70,122 +56,86 @@ table {
 }
 
 th, td {
-    border: 1px solid #dddddd;
-    padding: 8px;
+    border: 1px solid black;
+    padding: 6px;
     text-align: left;
-}
-
-th {
-    background-color: #fff3e6;
 }
 
 td.kosong {
     text-align: center;
-    color: #999999;
 }
 
 td input[type="number"] {
-    width: 70px;
+    width: 60px;
 }
 
 .total {
     text-align: right;
-    font-size: 18px;
     font-weight: bold;
 }
 
-/* ===== Form ===== */
+/* Form */
 label {
     display: block;
-    font-weight: bold;
-    margin-top: 12px;
-    margin-bottom: 4px;
+    margin-top: 10px;
 }
 
-select, input[type="text"], input[type="number"] {
-    padding: 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
+select, input, button {
     font-size: 14px;
+    padding: 4px 8px;
+    border: 1px solid black;
+    background: white;
+    color: black;
 }
 
-#pilih-pelanggan, #metode, #token-kartu {
+#pilih-pelanggan, #metode, #token-kartu, #tombol-checkout {
     width: 100%;
 }
 
-small {
-    display: block;
-    color: #777777;
-    margin-top: 4px;
+#tombol-checkout {
+    margin-top: 12px;
+    padding: 8px;
 }
 
-/* ===== Tombol ===== */
 button {
-    background-color: #e85d04;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 14px;
-    font-size: 14px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #c44d00;
+    background: black;
+    color: white;
 }
 
 button:disabled {
-    background-color: #bbbbbb;
+    color: gray;
+    border-color: gray;
     cursor: not-allowed;
 }
 
-button.tombol-hapus {
-    background-color: #d00000;
+button:disabled:hover {
+    background: white;
 }
 
-button.tombol-hapus:hover {
-    background-color: #9d0208;
+small {
+    display: block;
+    margin-top: 4px;
 }
 
-#tombol-checkout {
-    width: 100%;
-    margin-top: 16px;
-    padding: 12px;
-    font-size: 16px;
-}
-
-/* ===== Pesan sukses / error ===== */
+/* Kotak pesan: sukses garis biasa, error garis tebal */
 .pesan {
-    padding: 12px 16px;
-    border-radius: 8px;
+    border: 1px solid black;
+    padding: 10px;
     margin-bottom: 16px;
 }
 
-.pesan.sukses {
-    background-color: #d8f3dc;
-    border: 1px solid #52b788;
-    color: #1b4332;
-}
-
 .pesan.error {
-    background-color: #ffe5e5;
-    border: 1px solid #e5383b;
-    color: #9d0208;
+    border-width: 3px;
 }
 
 .pesan ul {
-    margin: 8px 0 0;
+    margin: 6px 0 0;
 }
 
-/* ===== Status pesanan ===== */
 .status {
     font-weight: bold;
-}
-
-.status-DIPROSES {
-    color: #2d6a4f;
-}
-
-.status-BATAL {
-    color: #d00000;
 }
